@@ -243,3 +243,5 @@ namespace DoAn_Web.Controllers
 }
 
 Thêm chức năng khóa/mở khóa tài khoản cho quản trị viên
+    
+Thêm chức năng xem và chỉnh sửa thông tin tài khoản cho quản trị viên
