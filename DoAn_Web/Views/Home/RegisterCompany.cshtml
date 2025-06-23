@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Đăng ký Công ty";
+}
+
+<div class="auth-container">
+    <div class="auth-form">
+        <h3>Đăng ký Công ty</h3>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        <form asp-action="RegisterCompany" method="post">
+            <div class="form-group">
+                <label for="companyName">Tên Công ty</label>
+                <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Nhập tên công ty" required />
+                <i class="fas fa-building"></i>
+            </div>
+
+            <div class="form-group">
+                <label for="companyEmail">Email Công ty</label>
+                <input type="email" id="companyEmail" name="companyEmail" class="form-control" placeholder="Nhập email công ty" required />
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="form-group">
+                <label for="companyTaxCode">Tax Code</label>
+                <input type="text" id="companyTaxCode" name="companyTaxCode" class="form-control" placeholder="Nhập TaxCode công ty" required />
+                <i class="fas fa-id-card"></i>
+            </div>
+            <div class="form-group">
+                <label for="companyPhone">Số điện thoại</label>
+                <input type="text" id="companyPhone" name="companyPhone" class="form-control" placeholder="Nhập số điện thoại" required />
+                <i class="fas fa-phone"></i>
+            </div>
+
+            <div class="form-group">
+                <label for="companyWebsite">Website</label>
+                <input type="text" id="companyWebsite" name="companyWebsite" class="form-control" placeholder="Nhập website (nếu có)" />
+                <i class="fas fa-globe"></i>
+            </div>
+
+            <div class="form-group position-relative">
+        <label for="password">Mật khẩu</label>
+        <input type="password" class="form-control" id="password" name="password" required />
+        <span class="toggle-password position-absolute" onclick="togglePassword('password', this)">
+            <i class="fas fa-eye"></i>
+        </span>
+    </div>
+    <div class="form-group position-relative">
+        <label for="confirmPassword">Xác nhận mật khẩu</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+        <span class="toggle-password position-absolute" onclick="togglePassword('confirmPassword', this)">
+            <i class="fas fa-eye"></i>
+        </span>
+    </div>
+
+            <button type="submit" class="btn-submit">Đăng ký</button>
+        </form>
+
+        <p class="auth-links">
+            Đã có tài khoản? <a asp-controller="Home" asp-action="LoginCompany">Đăng nhập</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+        <script>
+            function togglePassword(inputId, iconElement) {
+                const input = document.getElementById(inputId);
+                const icon = iconElement.querySelector('i');
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+        </script>
+}

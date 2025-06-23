@@ -1,0 +1,66 @@
+﻿@model IEnumerable<DoAn_Web.Models.Notification>
+
+@{
+    ViewData["Title"] = "Thông báo";
+}
+
+<h2>Thông báo của bạn</h2>
+
+@if (TempData["NotificationSuccess"] != null)
+{
+            <div class="alert alert-success">@TempData["NotificationSuccess"]</div>
+}
+
+@if (TempData["NotificationError"] != null)
+{
+            <div class="alert alert-danger">@TempData["NotificationError"]</div>
+}
+
+@if (!Model.Any())
+{
+        <p>Không có thông báo nào.</p>
+}
+else
+{
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Thời gian</th>
+                    <th>Nội dung</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var notification in Model)
+            {
+                        <tr>
+                            <td>
+                        @(notification.CreatedAt.HasValue? notification.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm"): "Không xác định")
+                            </td>
+                            <td>@notification.Message</td>
+                            <td>
+                        @if (notification.IsRead.HasValue && notification.IsRead.Value)
+                        {
+                               <span class="badge badge-read">Đã đọc</span>
+                        }
+                        else
+                        {
+                               <span class="badge bg-warning">Chưa đọc</span>
+                        }
+
+                            </td>
+                            <td>
+                        @if (!notification.IsRead.HasValue || !notification.IsRead.Value)
+                        {
+                                        <a asp-action="MarkAsRead" asp-route-id="@notification.NotificationId" class="btn btn-sm btn-primary">Đánh dấu đã đọc</a>
+                        }
+                                <a asp-action="Delete" asp-route-id="@notification.NotificationId" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa thông báo này?')">Xóa</a>
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Quay lại</a>

@@ -1,0 +1,82 @@
+﻿@model IOrderedEnumerable<IGrouping<DoAn_Web.Models.Company, DoAn_Web.Models.JobPosting>>
+<h2 class="latest-jobs-title">Danh sách việc làm</h2>
+<style>
+	/* CSS cho bảng trong trang Danh sách việc làm */
+	.job-list-table th, .job-list-table td {
+		padding: 8px;
+		text-align: left;
+		vertical-align: middle;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.job-list-table th:nth-child(1), .job-list-table td:nth-child(1) {
+		width: 200px;
+	}
+
+	.job-list-table th:nth-child(2), .job-list-table td:nth-child(2) {
+		width: 300px;
+	}
+
+	.job-list-table th:nth-child(3), .job-list-table td:nth-child(3) {
+		width: 150px;
+	}
+
+	.job-list-table th:nth-child(4), .job-list-table td:nth-child(4) {
+		width: 200px;
+	}
+
+	.job-list-table .action-buttons {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.job-list-table .action-buttons .btn {
+		margin: 0;
+	}
+</style>
+
+@if (!Model.Any())
+{
+				<p>Chưa có công việc nào được đăng.</p>
+}
+else
+{
+	@foreach (var companyGroup in Model)
+	{
+								<div class="company-group mb-4">
+									<h3>@companyGroup.Key.Name</h3>
+									<table class="table table-bordered job-list-table">
+										<thead>
+											<tr>
+												<th>Tiêu đề</th>
+												<th>Mô tả</th>
+												<th>Ngày đăng</th>
+												<th>Hành động</th>
+											</tr>
+										</thead>
+										<tbody>
+					@foreach (var job in companyGroup)
+					{
+															<tr>
+																<td title="@job.Title">@job.Title</td>
+																<td title="@job.Description">@job.Description</td>
+																<td>@(job.CreatedAt.HasValue ? job.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</td>
+																<td>
+																	<div class="action-buttons">
+																		<a asp-controller="Jobs" asp-action="Details" asp-route-id="@job.JobId" class="btn btn-primary uniform-btn">Xem chi tiết</a>
+									@if (Context.Session.GetInt32("StudentId") != null)
+									{
+																						<a asp-controller="Applications" asp-action="ApplyJob" asp-route-jobId="@job.JobId" class="btn btn-custom uniform-btn">Ứng tuyển</a>
+									}
+																	</div>
+																</td>
+															</tr>
+					}
+										</tbody>
+									</table>
+								</div>
+	}
+}

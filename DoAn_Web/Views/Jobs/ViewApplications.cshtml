@@ -1,0 +1,68 @@
+﻿@model List<DoAn_Web.Models.Application>
+
+<div class="application-list-container">
+    <h2 class="application-list-title">Danh sách ứng viên cho công việc: @ViewBag.JobTitle</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+            <div class="alert alert-success" role="alert">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (Model.Any())
+    {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã sinh viên</th>
+                            <th>Họ tên</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày nộp đơn</th>
+                            <th>CV</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var app in Model)
+                    {
+                                <tr>
+                                    <td>@app.Student?.StudentCode</td>
+                                    <td>@app.Student?.FullName</td>
+                                    <td>@app.Status</td>
+                                    <td>@(app.AppliedAt.HasValue ? app.AppliedAt.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</td>
+                                    <td><a href="@app.ResumeUrl" target="_blank">Xem CV</a></td>
+                                    <td>
+                                        <a asp-action="ScheduleInterview" asp-route-applicationId="@app.ApplicationId" class="btn btn-primary uniform-btn">Lên lịch phỏng vấn</a>
+                                    </td>
+                                </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+    }
+    else
+    {
+            <p>Chưa có ứng viên nào nộp đơn cho công việc này.</p>
+    }
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary uniform-btn">Quay lại</a>
+    </div>
+</div>
+
+@section Scripts {
+        <script>
+            // Hiệu ứng loading cho nút khi submit form
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function () {
+                    const button = form.querySelector("button[type='submit']");
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+                    button.disabled = true;
+                });
+            });
+        </script>
+}

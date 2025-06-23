@@ -1,0 +1,217 @@
+﻿@model DoAn_Web.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+        <div class="alert alert-danger alert-floating" role="alert">@TempData["ErrorMessage"]</div>
+        
+}
+@if (TempData["SuccessMessage"] != null)
+{
+        <div class="alert alert-success alert-floating" role="alert">@TempData["SuccessMessage"]</div>
+}
+<script>
+    // Chờ 5 giây (5000ms) rồi ẩn thông báo
+    setTimeout(function(){
+        var alertElem = document.querySelector('.alert-floating');
+        if(alertElem) {
+            // Bạn có thể dùng fadeOut bằng CSS hoặc ẩn luôn
+            alertElem.style.display = 'none';
+        }
+    }, 5000);
+</script>
+
+@section Header {
+            <section class="header-section">
+                <div class="header-content">
+                    <h1>Chào mừng đến với trang tuyển dụng!</h1>
+                    <!-- Khung tìm kiếm chính -->
+                    <div class="search-bar mt-4">
+                        <form class="d-flex" asp-controller="Home" asp-action="SearchJobs" method="get">
+                            <!-- Tìm kiếm theo từ khóa -->
+                            <input type="text" name="keyword" class="form-control" placeholder="Tìm theo kỹ năng, thành phố, công ty, thể loại..." value="@ViewBag.Keyword" />
+                            <!-- Nút tìm kiếm -->
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Tìm kiếm</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+}
+   <hr class="divider">
+<!-- Nội dung chính -->
+<div class="row">
+    <h2 class="latest-jobs-title">Việc làm mới nhất</h2>
+    <div class="d-flex align-items-center">
+        <!-- Nút mũi tên trái -->
+        <button class="btn btn-outline-secondary me-3 @(ViewBag.CurrentPage > 1 ? "" : "disabled")" id="prev-btn">
+            <
+        </button>
+
+        <!-- Danh sách công việc -->
+        <div id="job-list">
+            <div class="job-list-inner">
+                @await Html.PartialAsync("_JobList", Model.Jobs)
+            </div>
+        </div>
+
+        <!-- Nút mũi tên phải -->
+        <button class="btn btn-outline-secondary ms-3 @(ViewBag.CurrentPage < ViewBag.TotalPages ? "" : "disabled")" id="next-btn">
+            >
+        </button>
+    </div>
+</div>
+
+<!-- Script AJAX cho việc làm -->
+<script>
+    let currentPage = @ViewBag.CurrentPage;
+    const totalPages = @ViewBag.TotalPages;
+    let isAnimating = false;
+
+    function loadJobs(page, direction) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const jobListInner = document.querySelector('#job-list .job-list-inner');
+
+        // Hiệu ứng trượt ra
+        jobListInner.style.animation = direction === 'next' ? 'slideOutToLeft 0.5s ease-in-out' : 'slideOutToRight 0.5s ease-in-out';
+
+        // Chờ hiệu ứng trượt ra hoàn tất
+        setTimeout(() => {
+            fetch(`/Home/GetJobs?page=${page}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/html'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Tạo một container mới để chứa nội dung mới
+                const newInner = document.createElement('div');
+                newInner.className = 'job-list-inner';
+                newInner.innerHTML = html;
+
+                // Thay thế container cũ bằng container mới
+                jobListInner.parentNode.replaceChild(newInner, jobListInner);
+
+                // Hiệu ứng trượt vào
+                newInner.style.animation = direction === 'next' ? 'slideInFromRight 0.5s ease-in-out' : 'slideInFromLeft 0.5s ease-in-out';
+
+                currentPage = page;
+                updateButtons();
+                isAnimating = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                isAnimating = false;
+            });
+        }, 500);
+    }
+
+    function updateButtons() {
+        const prevBtn = document.querySelector('#prev-btn');
+        const nextBtn = document.querySelector('#next-btn');
+
+        // Kiểm tra trạng thái nút
+        prevBtn.classList.toggle('disabled', currentPage <= 1);
+        nextBtn.classList.toggle('disabled', currentPage >= totalPages);
+
+        // Gán sự kiện onclick
+        prevBtn.onclick = () => {
+            if (currentPage > 1) {
+                loadJobs(currentPage - 1, 'prev');
+            }
+        };
+
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                loadJobs(currentPage + 1, 'next');
+            }
+        };
+    }
+
+    // Khởi tạo sự kiện khi trang tải
+    document.addEventListener('DOMContentLoaded', () => {
+        updateButtons();
+    });
+</script>
+   <hr class="divider">
+<!-- Phần công ty nổi bật -->
+<div class="company-section mt-4">
+    <h2 class="featured-companies-title">Công ty nổi bật</h2>
+    <div class="company-list">
+        @for (int i = 0; i < Model.Companies.Count; i++)
+        {
+            var company = Model.Companies[i];
+            var isEvenRow = i % 2 == 0; // Hàng chẵn (0, 2): công ty bên trái, chi tiết bên phải
+
+                    <div class="row mb-4">
+                @if (isEvenRow)
+                {
+                                    <!-- Hàng chẵn: Công ty bên trái, chi tiết bên phải -->
+                                    <div class="col-md-6">
+                                        <div class="company-card" data-company-id="@company.CompanyId" style="cursor: pointer; border: 2px solid #000; padding: 15px; text-align: center;">
+                                            <img src="@company.LogoUrl" alt="@company.Name Logo" style="width: 100%; height: 150px; object-fit: contain;">
+                                            <h5 class="mt-2">@company.Name</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="company-details-@company.CompanyId p-4">
+                                            <h4>@company.Name</h4>
+                                            <p><strong>Địa chỉ:</strong> @company.Address</p>
+                                            <p><strong>Email:</strong> @company.Email</p>
+                                            <p><strong>Số điện thoại:</strong> @company.Phone</p>
+                            @if (!string.IsNullOrEmpty(company.Website))
+                            {
+                                                        <p><strong>Website:</strong> <a href="@company.Website" target="_blank">@company.Website</a></p>
+                            }
+                                            <p><strong>Giới thiệu:</strong> @company.Description</p>
+                                            <a href="@company.Website" target="_blank" class="btn btn-success">Xem thêm</a>
+                                        </div>
+                                    </div>
+                }
+                else
+                {
+                                    <!-- Hàng lẻ: Chi tiết bên trái, công ty bên phải -->
+                                    <div class="col-md-6">
+                                        <div class="company-details-@company.CompanyId p-4">
+                                            <h4>@company.Name</h4>
+                                            <p><strong>Địa chỉ:</strong> @company.Address</p>
+                                            <p><strong>Email:</strong> @company.Email</p>
+                                            <p><strong>Số điện thoại:</strong> @company.Phone</p>
+                            @if (!string.IsNullOrEmpty(company.Website))
+                            {
+                                                        <p><strong>Website:</strong> <a href="@company.Website" target="_blank">@company.Website</a></p>
+                            }
+                                             <p><strong>Giới thiệu:</strong> @company.Description</p>
+                                            <a href="@company.Website" target="_blank" class="btn btn-success">Xem thêm</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="company-card" data-company-id="@company.CompanyId" style="cursor: pointer; border: 2px solid #000; padding: 15px; text-align: center;">
+                                            <img src="@company.LogoUrl" alt="@company.Name Logo" style="width: 100%; height: 150px; object-fit: contain;">
+                                            <h5 class="mt-2">@company.Name</h5>
+                                        </div>
+                                    </div>
+                }
+                    </div>
+        }
+    </div>
+</div>
+<div class="info-box mt-5">
+    <div class="container">
+        <h2 class="info-title">Nhiều công ty đang tham gia tuyển dụng!</h2>
+        <p class="info-description">
+            Trang tuyển dụng của chúng tôi đã thu hút nhiều công ty hàng đầu tham gia tuyển dụng các ứng viên tài năng.
+            Chúng tôi kết nối các công ty và ứng viên tiềm năng trong nhiều ngành nghề khác nhau. Với hàng nghìn công việc
+            mới cập nhật mỗi ngày, chắc chắn bạn sẽ tìm thấy cơ hội việc làm phù hợp với kỹ năng và sở thích của mình.
+        </p>
+        <p class="info-description">
+            Hãy bắt đầu tìm kiếm việc làm ngay hôm nay để mở ra những cơ hội nghề nghiệp tuyệt vời tại các công ty danh tiếng trong và ngoài nước!
+        </p>
+    </div>
+</div>
+
+

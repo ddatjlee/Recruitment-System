@@ -1,0 +1,11 @@
+﻿@model DoAn_Web.Models.Interview
+
+<h2>Chi tiết phỏng vấn</h2>
+
+<p><strong>Vị trí công việc:</strong> @Model.Application.JobPostings.Title</p>
+<p><strong>Loại phỏng vấn:</strong> @Model.InterviewType</p>
+<p><strong>Thời gian:</strong> @Model.StartTime.ToString("dd/MM/yyyy HH:mm")</p>
+<p><strong>Địa điểm:</strong> @Model.Location ?? "Không có địa điểm"</p>
+<p><strong>Liên kết (nếu trực tuyến):</strong> @Model.OnlineLink</p>
+<p><strong>Ghi chú:</strong> @Model.Notes</p>
+<p><strong>Kết quả:</strong> @Model.Result</p>

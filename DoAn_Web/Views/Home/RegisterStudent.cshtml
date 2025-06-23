@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Đăng ký Sinh viên";
+}
+
+<div class="auth-container">
+    <div class="auth-form">
+        <h3>Đăng ký Sinh viên</h3>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        <form asp-action="RegisterStudent" method="post">
+            <div class="form-group">
+                <label for="fullName">Họ và Tên</label>
+                <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Nhập họ và tên" required />
+                <i class="fas fa-user"></i>
+            </div>
+
+            <div class="form-group">
+                <label for="studentCode">Mã Sinh viên</label>
+                <input type="text" id="studentCode" name="studentCode" class="form-control" placeholder="Nhập mã sinh viên" required />
+                <i class="fas fa-id-card"></i>
+            </div>
+
+          <div class="form-group position-relative">
+        <label for="password">Mật khẩu</label>
+        <input type="password" class="form-control" id="password" name="password" required />
+        <span class="toggle-password position-absolute" onclick="togglePassword('password', this)">
+            <i class="fas fa-eye"></i>
+        </span>
+    </div>
+    <div class="form-group position-relative">
+        <label for="confirmPassword">Xác nhận mật khẩu</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+        <span class="toggle-password position-absolute" onclick="togglePassword('confirmPassword', this)">
+            <i class="fas fa-eye"></i>
+        </span>
+    </div>
+
+            <button type="submit" class="btn-submit">Đăng ký</button>
+        </form>
+
+        <p class="auth-links">
+            Đã có tài khoản? <a asp-controller="Home" asp-action="LoginStudent">Đăng nhập</a>
+        </p>
+    </div>
+</div>
+
+        @section Scripts {
+    <script>
+        function togglePassword(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            const icon = iconElement.querySelector('i');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
+    }

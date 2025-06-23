@@ -1,0 +1,70 @@
+﻿@model DoAn_Web.Models.Company
+
+@{
+    ViewData["Title"] = "Hồ sơ Công ty";
+}
+
+<div class="company-profile-container">
+    <h2 class="company-profile-title">Thông tin công ty</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+            <div class="alert alert-success" role="alert">@TempData["SuccessMessage"]</div>
+    }
+
+    <form asp-action="UpdateProfileCompany" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name">Tên công ty</label>
+            <input asp-for="Name" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TaxCode">Mã số thuế</label>
+            <input asp-for="TaxCode" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Phone">Số điện thoại</label>
+            <input asp-for="Phone" class="form-control" placeholder="Nhập số điện thoại" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Website">Website</label>
+            <input asp-for="Website" class="form-control" placeholder="https://example.com" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Mô tả công ty</label>
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Giới thiệu về công ty..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address">Địa chỉ</label>
+            <input asp-for="Address" class="form-control" placeholder="Nhập địa chỉ công ty" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LogoUrl">Logo công ty</label>
+            <input asp-for="LogoUrl" type="file" class="form-control-file" name="logoFile" />
+            @if (!string.IsNullOrEmpty(Model.LogoUrl))
+            {
+                    <div class="logo-preview">
+                        <img src="@Model.LogoUrl" alt="Logo" />
+                    </div>
+            }
+        </div>
+
+        <input type="hidden" asp-for="CompanyId" />
+        <button type="submit" class="btn btn-primary uniform-btn">Cập nhật thông tin</button>
+    </form>
+</div>

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DoAn_Web.Models.Interview>
+
+<h2>Danh sách phỏng vấn</h2>
+
+@if (!Model.Any())
+{
+        <p>Hiện tại bạn chưa có lịch phỏng vấn nào.</p>
+}
+else
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vị trí công việc</th>
+                    <th>Loại phỏng vấn</th>
+                    <th>Thời gian</th>
+                    <th>Địa điểm</th>
+                    <th>Kết quả</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var interview in Model)
+            {
+                        <tr>
+                            <td>@interview.Application.JobPostings.Title</td>
+                            <td>@interview.InterviewType</td>
+                            <td>@interview.StartTime.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@interview.Location ?? "Không có địa điểm"</td>
+                            <td>@interview.Result</td>
+                            <td>
+                                <a class="btn btn-info" asp-action="InterviewDetails" asp-route-interviewId="@interview.InterviewId">Chi tiết</a>
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

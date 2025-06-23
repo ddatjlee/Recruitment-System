@@ -1,0 +1,69 @@
+﻿@model DoAn_Web.Models.Student
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="profile-container">
+    <h2 class="profile-title">Thông tin cá nhân</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+            <div class="alert alert-success" role="alert">@TempData["SuccessMessage"]</div>
+    }
+
+    <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="FullName">Họ và tên</label>
+            <input asp-for="FullName" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StudentCode">Mã sinh viên</label>
+            <input asp-for="StudentCode" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateOfBirth">Ngày sinh</label>
+            <input asp-for="DateOfBirth" class="form-control" type="date" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Phone">Số điện thoại</label>
+            <input asp-for="Phone" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Gpa">Điểm GPA</label>
+            <input asp-for="Gpa" class="form-control" step="0.01" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GraduationYear">Năm tốt nghiệp</label>
+            <input asp-for="GraduationYear" class="form-control" type="number" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GitHubProfile">GitHub Profile</label>
+            <input asp-for="GitHubProfile" class="form-control" placeholder="https://github.com/..." />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="AvatarUrl">Ảnh đại diện</label>
+            <input asp-for="AvatarUrl" type="file" class="form-control-file" name="avatarFile" />
+            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+            {
+                    <div class="avatar-preview">
+                        <img src="@Model.AvatarUrl" alt="Avatar" />
+                    </div>
+            }
+        </div>
+
+        <input type="hidden" asp-for="StudentId" />
+        <button type="submit" class="btn btn-primary uniform-btn">Cập nhật thông tin</button>
+    </form>
+</div>

@@ -1,0 +1,54 @@
+﻿@* @model IEnumerable<DoAn_Web.Models.Interview> *@
+
+@* <h2>Danh sách lịch phỏng vấn cho @ViewBag.JobTitle</h2> *@
+
+@* @if (TempData["ErrorMessage"] != null) *@
+@* { *@
+@*         <div class="alert alert-danger">@TempData["ErrorMessage"]</div> *@
+@* } *@
+
+@* @if (!Model.Any()) *@
+@* { *@
+@*         <p>Chưa có lịch phỏng vấn nào cho công việc này.</p> *@
+@* } *@
+@* else *@
+@* { *@
+@*         <table class="table table-bordered"> *@
+@*             <thead> *@
+@*                 <tr> *@
+@*                     <th>Tên sinh viên</th> *@
+@*                     <th>Loại phỏng vấn</th> *@
+@*                     <th>Thời gian bắt đầu</th> *@
+@*                     <th>Thời gian kết thúc</th> *@
+@*                     <th>Địa điểm/Link</th> *@
+@*                     <th>Ghi chú</th> *@
+@*                     <th>Kết quả</th> *@
+@*                 </tr> *@
+@*             </thead> *@
+@*             <tbody> *@
+@*             @foreach (var interview in Model) *@
+@*             { *@
+@*                         <tr> *@
+@*                             <td>@interview.Application.Student.FullName</td> *@
+@*                             <td>@interview.InterviewType</td> *@
+@*                             <td>@interview.StartTime.ToString("dd/MM/yyyy HH:mm")</td> *@
+@*                             <td>@interview.EndTime.ToString("dd/MM/yyyy HH:mm")</td> *@
+@*                             <td> *@
+@*                         @if (interview.InterviewType == "online") *@
+@*                         { *@
+@*                                         <a href="@interview.OnlineLink" target="_blank">@interview.OnlineLink</a> *@
+@*                         } *@
+@*                         else *@
+@*                         { *@
+@*                             @interview.Location *@
+@*                         } *@
+@*                             </td> *@
+@*                             <td>@interview.Notes</td> *@
+@*                             <td>@interview.Result</td> *@
+@*                         </tr> *@
+@*             } *@
+@*             </tbody> *@
+@*         </table> *@
+@* } *@
+
+@* <a asp-action="ViewApplications" asp-route-jobId="@ViewBag.JobId" class="btn btn-secondary">Quay lại</a> *@

@@ -1,0 +1,96 @@
+﻿@model DoAn_Web.Models.JobPosting
+
+@{
+    ViewData["Title"] = "Đăng tin tuyển dụng";
+}
+
+<div class="job-posting-container">
+    <h2 class="job-posting-title">Đăng tin tuyển dụng</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+            <div class="alert alert-success" role="alert">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+    }
+
+    <form asp-action="CreateJob" method="post" class="mt-4" id="createJobForm">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="JobTypeId" class="form-label">Loại công việc</label>
+            <select asp-for="JobTypeId" class="form-control" asp-items="@(new SelectList(ViewBag.JobTypes, "JobTypeId", "Name"))">
+                <option value="">Chọn loại công việc</option>
+            </select>
+            <span asp-validation-for="JobTypeId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LevelId" class="form-label">Mức độ kinh nghiệm</label>
+            <select asp-for="LevelId" class="form-control" asp-items="@(new SelectList(ViewBag.ExperienceLevels, "LevelId", "Name"))">
+                <option value="">Chọn mức độ kinh nghiệm</option>
+            </select>
+            <span asp-validation-for="LevelId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LocationId" class="form-label">Địa điểm</label>
+            <select asp-for="LocationId" class="form-control" asp-items="@(new SelectList(ViewBag.Locations, "LocationId", "City"))">
+                <option value="">Chọn địa điểm</option>
+            </select>
+            <span asp-validation-for="LocationId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Tiêu đề</label>
+            <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề công việc" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" placeholder="Nhập mô tả chi tiết công việc"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Requirements" class="form-label">Yêu cầu</label>
+            <textarea asp-for="Requirements" class="form-control" placeholder="Nhập các yêu cầu công việc"></textarea>
+            <span asp-validation-for="Requirements" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Benefits" class="form-label">Quyền lợi</label>
+            <textarea asp-for="Benefits" class="form-control" placeholder="Nhập các quyền lợi, phúc lợi"></textarea>
+            <span asp-validation-for="Benefits" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SalaryRange" class="form-label">Mức lương</label>
+            <input asp-for="SalaryRange" class="form-control" placeholder="Ví dụ: 10-15 triệu" />
+            <span asp-validation-for="SalaryRange" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ApplicationDeadline" class="form-label">Hạn nộp đơn</label>
+            <input asp-for="ApplicationDeadline" type="date" class="form-control" />
+            <span asp-validation-for="ApplicationDeadline" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Vacancies" class="form-label">Số lượng tuyển</label>
+            <input asp-for="Vacancies" type="number" class="form-control" value="1" />
+            <span asp-validation-for="Vacancies" class="text-danger"></span>
+        </div>
+
+        <div class="form-actions text-center mt-4">
+            <button type="submit" class="btn btn-primary uniform-btn">Đăng tin</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

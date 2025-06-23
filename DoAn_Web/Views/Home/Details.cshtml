@@ -1,0 +1,67 @@
+﻿@model DoAn_Web.Models.JobPosting
+
+@{
+    ViewData["Title"] = "Chi tiết công việc";
+}
+
+<div class="job-detail-container">
+    <!-- Tiêu đề công việc và tên công ty -->
+    <div class="job-detail-header">
+        <h2 class="job-title">@Model.Title</h2>
+        <h5 class="company-name">@Model.Company.Name</h5>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+    }
+
+    <!-- Nội dung chi tiết công việc -->
+    <div class="job-detail-content">
+        <div class="job-detail-item">
+            <span class="detail-label">Mức lương:</span>
+            <span class="detail-value">@Model.SalaryRange</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Địa điểm:</span>
+            <span class="detail-value">@(Model.Location != null ? $"{Model.Location.City}, {Model.Location.Country}" : "Không xác định")</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Loại công việc:</span>
+            <span class="detail-value">@Model.JobType.Name</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Kinh nghiệm:</span>
+            <span class="detail-value">@Model.Level.Name</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Mô tả:</span>
+            <span class="detail-value">@Model.Description</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Yêu cầu:</span>
+            <span class="detail-value">@Model.Requirements</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Lợi ích:</span>
+            <span class="detail-value">@Model.Benefits</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Hạn nộp:</span>
+            <span class="detail-value">@Model.ApplicationDeadline.ToString("dd/MM/yyyy")</span>
+        </div>
+        <div class="job-detail-item">
+            <span class="detail-label">Số lượng tuyển:</span>
+            <span class="detail-value">@Model.Vacancies</span>
+        </div>
+    </div>
+
+    <!-- Khu vực nút hành động -->
+    <div class="job-detail-actions">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        @if (Context.Session.GetString("StudentCode") != null)
+        {
+                <a asp-controller="Applications" asp-action="Create" asp-route-jobId="@Model.JobId" class="btn btn-primary">Ứng tuyển ngay</a>
+        }
+    </div>
+</div>

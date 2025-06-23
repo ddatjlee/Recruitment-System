@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DoAn_Web</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Icon pass -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- File CSS của bạn -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DoAn_Web.styles.css" asp-append-version="true" />
+
+    <!-- CSS tùy chỉnh cho Back to Top -->
+    <style>
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">DoAn_Web</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse fw-bold" id="navbarNav">
+                <ul class="navbar-nav me-auto fw-bold">
+                    <li class="nav-item fw-bold">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Jobs" asp-action="Index">Việc làm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Admin" asp-action="About">Giới thiệu</a>
+                    </li>
+                </ul>
+
+                <!-- Hiển thị menu đăng nhập/đăng xuất và thông báo -->
+                <ul class="navbar-nav fw-bold">
+                    @if (Context.Session.GetInt32("StudentId") != null)
+                    {
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" asp-controller="Notifications" asp-action="Index">
+                                    <i class="fas fa-bell"></i> Thông báo
+                                @if (ViewBag.UnreadNotifications > 0)
+                                {
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        @ViewBag.UnreadNotifications
+                                                <span class="visually-hidden">Thông báo chưa đọc</span>
+                                            </span>
+                                }
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="studentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Chào @Context.Session.GetString("StudentName")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="studentDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Profile">Thông tin cá nhân</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Interviews">Xem lịch phỏng vấn</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Logout">Đăng xuất</a></li>
+                                </ul>
+                            </li>
+                    }
+                    else if (Context.Session.GetInt32("CompanyId") != null)
+                    {
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" asp-controller="Notifications" asp-action="Index">
+                                    <i class="fas fa-bell"></i> Thông báo
+                                @if (ViewBag.UnreadNotifications > 0)
+                                {
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        @ViewBag.UnreadNotifications
+                                                <span class="visually-hidden">Thông báo chưa đọc</span>
+                                            </span>
+                                }
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="companyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Chào @Context.Session.GetString("CompanyName")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="companyDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Jobs" asp-action="CreateJob">Đăng tin tuyển dụng</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Jobs" asp-action="SelectJobForApplications">Xem ứng viên</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="ProfileCompany">Thông tin công ty</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Logout">Đăng xuất</a></li>
+                                </ul>
+                            </li>
+                    }
+                    else if (Context.Session.GetInt32("AdminId") != null)
+                    {
+                            <li class="nav-item">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Chào Admin @Context.Session.GetString("AdminName")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">Quản lý bài đăng tuyển dụng</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="ManageAccounts">Quản lý tài khoản</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Logout">Đăng xuất</a></li>
+                                </ul>
+                            </li>
+                    }
+                    else
+                    {
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Đăng nhập
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li><a class="dropdown-item" href="@Url.Action("LoginStudent", "Home")">Đăng nhập bằng Sinh viên</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("LoginCompany", "Home")">Đăng nhập bằng Công ty</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("LoginAdmin", "Home")">Đăng nhập bằng Admin</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuRegister" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Đăng ký
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuRegister">
+                                    <li><a class="dropdown-item" href="@Url.Action("RegisterStudent", "Home")">Đăng ký Sinh viên</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("RegisterCompany", "Home")">Đăng ký Công ty</a></li>
+                                </ul>
+                            </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header với Background (render từ view) -->
+    @RenderSection("Header", required: false)
+
+    <div class="container">
+        <main role="main" class="content-section">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-5 mt-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Cột Company -->
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Công ty</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Giới thiệu</a></li>
+                        <li><a href="#" class="text-white">Liên hệ </a></li>
+                        <li><a href="#" class="text-white">Bảo mật</a></li>
+                        <li><a href="#" class="text-white">Trợ giúp</a></li>
+                    </ul>
+                </div>
+
+                <!-- Cột Contact -->
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Liên hệ</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Trường Đai Học Hutech</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>hutech@example.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Cột Google Map -->
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Bản đồ</h4>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.6142029797343!2d106.80632377421058!3d10.840807489311873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175274f07046f89%3A0x3a9cb196c5e1a7de!2zSFVURUNIIC0gxJDhuqFpIGjhu41jIEPDtG5nIG5naOG7hyBUUC5IQ00gKEhpdGVjaCBQYXJrIENhbXB1cyk!5e0!3m2!1svi!2s!4v1743307008388!5m2!1svi!2s" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- Phần bản quyền -->
+            <div class="mt-4">
+                <p>© 2025 - DoAn_Web. Tất cả quyền lợi thuộc về DoAn_Web.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Nút Back to Top -->
+    <div id="back-to-top">
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <!-- Thêm jQuery trước các script validation -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function(){
+            // Hiển thị nút khi cuộn trang xuống hơn 100px
+            $(window).scroll(function(){
+                if ($(this).scrollTop() > 100) {
+                    $('#back-to-top').fadeIn();
+                } else {
+                    $('#back-to-top').fadeOut();
+                }
+            });
+            // Khi click nút, cuộn trang về đầu
+            $('#back-to-top').click(function(){
+                $('html, body').animate({scrollTop : 0}, 600);
+                return false;
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

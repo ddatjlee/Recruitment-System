@@ -1,0 +1,25 @@
+﻿@model List<DoAn_Web.Models.JobPosting>
+
+<div class="row flex-grow-1">
+    @foreach (var job in Model)
+    {
+            <div class="col-md-4 mb-5">
+                <div class="card shadow-sm job-card">
+                    <div class="card-body">
+                        <h5 class="card-title">@job.Title</h5>
+                        <p class="card-text"><strong>@job.Company.Name</strong> - <span class="text-success">@job.SalaryRange</span></p>
+                        <p class="card-text"><strong>Địa điểm:</strong> @(job.Location != null ? $"{job.Location.City}, {job.Location.Country}" : "Không xác định")</p>
+                        <p class="card-text"><strong>Mô tả:</strong> @job.Description</p>
+                        <p class="card-text"><small class="text-muted">Hạn nộp: @job.ApplicationDeadline.ToString("dd/MM/yyyy")</small></p>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@job.JobId" class="btn btn-custom job-btn me-2">Xem chi tiết</a>
+                        @if (Context.Session.GetInt32("StudentId") != null)
+                        {
+                                    <a asp-controller="Applications" asp-action="ApplyJob" asp-route-jobId="@job.JobId" class="btn btn-custom job-btn">Ứng tuyển</a>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+</div>

@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Đăng nhập Sinh viên";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+            <div class="alert alert-danger alert-floating" role="alert">@TempData["ErrorMessage"]</div>
+
+}
+@if (TempData["SuccessMessage"] != null)
+{
+            <div class="alert alert-success alert-floating" role="alert">@TempData["SuccessMessage"]</div>
+}
+<script>
+    // Chờ 5 giây (5000ms) rồi ẩn thông báo
+    setTimeout(function(){
+        var alertElem = document.querySelector('.alert-floating');
+        if(alertElem) {
+            // Bạn có thể dùng fadeOut bằng CSS hoặc ẩn luôn
+            alertElem.style.display = 'none';
+        }
+    }, 5000);
+</script>
+<div class="auth-container">
+    <div class="auth-form">
+        <h3>Đăng nhập Sinh viên</h3>
+        <form method="post" asp-controller="Home" asp-action="LoginStudent">
+            <div class="form-group">
+                <label for="studentCode">Mã Sinh viên</label>
+                <input type="text" id="studentCode" name="studentCode" class="form-control" placeholder="Nhập mã sinh viên" required />
+                <i class="fas fa-user"></i>
+            </div>
+
+            <div class="form-group position-relative">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required />
+                <span class="toggle-password" onclick="togglePassword('password')">
+                    <i class="fas fa-eye" id="toggleIconStudent"></i>
+                </span>
+            </div>
+
+            <button type="submit" class="btn-submit" onclick="this.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Đang xử lý...';">Đăng nhập</button>
+        </form>
+
+        <p class="auth-links">
+            Chưa có tài khoản? <a asp-controller="Home" asp-action="RegisterStudent">Đăng ký</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+        <script>
+            function togglePassword(inputId) {
+                var passwordInput = document.getElementById(inputId);
+                var toggleIcon = document.getElementById("toggleIconStudent");
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    toggleIcon.classList.remove("fa-eye");
+                    toggleIcon.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    toggleIcon.classList.remove("fa-eye-slash");
+                    toggleIcon.classList.add("fa-eye");
+                }
+            }
+        </script>
+}

@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Giới thiệu";
+}
+
+<!-- Header Section -->
+<div class="header-section gradient-bg">
+    <div class="header-content">
+        <h1>Giới thiệu về chúng tôi</h1>
+        <p>Đội ngũ phát triển và sứ mệnh của trang web tuyển dụng nhân sự</p>
+    </div>
+</div>
+
+<!-- About Section -->
+<section class="about-section py-5">
+    <div class="container">
+        <!-- Giới thiệu về trang web -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="mb-4">Về trang web tuyển dụng nhân sự</h2>
+                <p class="lead">
+                    Trang web tuyển dụng nhân sự của chúng tôi được xây dựng bởi một nhóm newbie đầy nhiệt huyết, với mục tiêu kết nối các ứng viên tài năng với những cơ hội việc làm phù hợp. Dù chỉ mới bắt đầu, chúng tôi đã nỗ lực tạo ra một nền tảng thân thiện, dễ sử dụng, giúp các công ty tìm kiếm nhân sự và các ứng viên tìm được công việc mơ ước. Với sự hỗ trợ của cộng đồng, chúng tôi hy vọng sẽ không ngừng cải thiện và mang lại giá trị tốt nhất cho người dùng!
+                </p>
+            </div>
+        </div>
+
+        <!-- Giới thiệu về nhóm -->
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h2>Đội ngũ của chúng tôi</h2>
+                <p>Gặp gỡ những thành viên đã tạo nên trang web này</p>
+            </div>
+
+            <!-- Thành viên 1: Phi Hùng -->
+            <div class="col-md-3 mb-4">
+                <div class="card team-card">
+                    <img src="/images/avatars/phi-hung.jpg" class="card-img-top" alt="Phi Hùng" style="height: 200px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Phi Hùng</h5>
+                        @* <p class="card-text"> Đảm nhiệm phát triển backend và quản lý dự án.</p> *@
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thành viên 2: Thành Đạt -->
+            <div class="col-md-3 mb-4">
+                <div class="card team-card">
+                    <img src="/images/avatars/thanh-dat.jpg" class="card-img-top" alt="Thành Đạt" style="height: 200px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Thành Đạt</h5>
+                        @* <p class="card-text">Frontend Developer - Thiết kế giao diện người dùng thân thiện.</p> *@
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thành viên 3: Thế Hùng -->
+            <div class="col-md-3 mb-4">
+                <div class="card team-card">
+                    <img src="/images/avatars/the-hung.jpg" class="card-img-top" alt="Thế Hùng" style="height: 200px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Thế Hùng</h5>
+                        @* <p class="card-text">Database Manager - Quản lý và tối ưu cơ sở dữ liệu.</p> *@
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thành viên 4: Đăng Khoa -->
+            <div class="col-md-3 mb-4">
+                <div class="card team-card">
+                    <img src="/images/avatars/dang-khoa.jpg" class="card-img-top" alt="Đăng Khoa" style="height: 200px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Đăng Khoa</h5>
+                        @* <p class="card-text">Tester & Support - Đảm bảo chất lượng và hỗ trợ người dùng.</p> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CSS tùy chỉnh cho trang About -->
+<style>
+    .about-section {
+        background-color: #f8f9fa;
+    }
+
+    .team-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        background: #fff;
+        height: 100%;
+    }
+
+    .team-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-color: #ff6f61;
+    }
+
+    .team-card .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .team-card .card-text {
+        font-size: 0.9rem;
+        color: #666;
+    }
+</style>

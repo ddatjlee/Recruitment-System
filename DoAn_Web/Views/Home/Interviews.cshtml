@@ -1,0 +1,56 @@
+﻿@model List<DoAn_Web.Models.Interview>
+
+<div class="interview-container">
+    <h2 class="interview-title">Lịch phỏng vấn của bạn</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (Model.Any())
+    {
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Công việc</th>
+                        <th>Công ty</th>
+                        <th>Loại phỏng vấn</th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Thời gian kết thúc</th>
+                        <th>Địa điểm/Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var interview in Model)
+                {
+                            <tr>
+                                <td>@interview.Application.Job.Title</td>
+                                <td>@interview.Application.Job.Company.Name</td>
+                                <td>@interview.InterviewType</td>
+                                <td>@interview.StartTime.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@interview.EndTime.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                            @if (interview.InterviewType == "online")
+                            {
+                                            <a href="@interview.OnlineLink" target="_blank">Tham gia</a>
+                            }
+                            else
+                            {
+                                @interview.Location
+                            }
+                                </td>
+                            </tr>
+                }
+                </tbody>
+            </table>
+    }
+    else
+    {
+            <p>Bạn chưa có lịch phỏng vấn nào.</p>
+    }
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary uniform-btn">Quay lại</a>
+    </div>
+</div>

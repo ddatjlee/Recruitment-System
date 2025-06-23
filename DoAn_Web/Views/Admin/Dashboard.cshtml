@@ -1,0 +1,83 @@
+﻿@model IEnumerable<DoAn_Web.Controllers.JobPostingViewModel>
+
+<h2>Quản lý bài đăng tuyển dụng</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Công ty</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var job = item.Job;
+            var history = item.History;
+                <tr>
+                    <td>
+                        <a href="@Url.Action("Details", "Jobs", new { id = job.JobId })">@job.Title</a>
+                    </td>
+                    <td>@job.Company.Name</td>
+                    <td>
+                    @if (history == null)
+                    {
+                                <span class="badge bg-warning">Chưa duyệt</span>
+                    }
+                    else if (history.Action == "Approved")
+                    {
+                                        <span class="badge badge-read">Đã duyệt</span>
+                    }
+                    else if (history.Action == "Rejected")
+                    {
+                                <span class="badge bg-danger">Đã từ chối</span>
+                    }
+                    </td>
+                    <td>
+                    @if (history == null)
+                    {
+                                <form method="post" asp-action="ApproveJob" asp-route-jobId="@job.JobId" style="display:inline;">
+                                    <button type="submit" class="btn btn-success">Duyệt</button>
+                                </form>
+                                <form method="post" asp-action="RejectJob" asp-route-jobId="@job.JobId" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger">Từ chối</button>
+                                </form>
+                    }
+                    else if (history.Action == "Approved")
+                    {
+                                <span class="badge badge-read">Hoàn thành</span>
+                    }
+                    else if (history.Action == "Rejected")
+                    {
+                                         <span class="badge badge-read">Hoàn thành</span>
+                    }
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+        <script>
+            // Thêm hiệu ứng loading cho các nút
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function () {
+                    const button = form.querySelector("button[type='submit']");
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+                    button.disabled = true;
+                });
+            });
+        </script>
+}

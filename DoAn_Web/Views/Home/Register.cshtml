@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+
+<div class="container mt-4">
+    <h3 class="text-center text-primary">Đăng ký tài khoản</h3>
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+
+    <form method="post" asp-controller="Home" asp-action="Register" onsubmit="return validatePassword()">
+        <div class="mb-3">
+            <label class="form-label">Vai trò</label>
+            <select name="role" class="form-control" required onchange="showFields()">
+                <option value="student">Sinh viên</option>
+                <option value="company">Công ty</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+
+        <!-- Sinh viên -->
+        <div id="studentFields">
+            <div class="mb-3">
+                <label class="form-label">Mã sinh viên</label>
+                <input type="text" name="studentCode" class="form-control" placeholder="Nhập mã sinh viên" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Số điện thoại</label>
+                <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại" required />
+            </div>
+        </div>
+
+        <!-- Công ty -->
+        <div id="companyFields" style="display: none;">
+            <div class="mb-3">
+                <label class="form-label">Tên công ty</label>
+                <input type="text" name="companyName" class="form-control" placeholder="Nhập tên công ty" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email công ty</label>
+                <input type="email" name="companyEmail" class="form-control" placeholder="Nhập email công ty" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Số điện thoại công ty</label>
+                <input type="text" name="companyPhone" class="form-control" placeholder="Nhập số điện thoại công ty" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Website công ty</label>
+                <input type="url" name="companyWebsite" class="form-control" placeholder="Nhập website công ty" required />
+            </div>
+        </div>
+
+        <!-- Admin -->
+        <div id="adminFields" style="display: none;">
+            <div class="mb-3">
+                <label class="form-label">Tên Admin</label>
+                <input type="text" name="adminFullName" class="form-control" placeholder="Nhập tên admin" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email Admin</label>
+                <input type="email" name="adminEmail" class="form-control" placeholder="Nhập email admin" required />
+            </div>
+        </div>
+
+        <!-- Các trường chung -->
+        <div class="mb-3">
+            <label class="form-label">Họ và Tên</label>
+            <input type="text" name="fullName" class="form-control" placeholder="Nhập Họ Tên" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mật khẩu</label>
+            <div class="input-group">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Nhập Mật Khẩu" required />
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password', 'togglePasswordIcon')">
+                    <i id="togglePasswordIcon" class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nhập lại mật khẩu</label>
+            <div class="input-group">
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Nhập lại Mật Khẩu" required />
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPassword', 'toggleConfirmPasswordIcon')">
+                    <i id="toggleConfirmPasswordIcon" class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="error-message" class="text-danger"></div>
+        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+    </form>
+
+    <p class="mt-3 text-center">
+        Đã có tài khoản? <a asp-controller="Home" asp-action="Login">Đăng nhập</a>
+    </p>
+</div>

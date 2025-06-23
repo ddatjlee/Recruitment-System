@@ -1,0 +1,47 @@
+﻿@model DoAn_Web.Models.Application
+
+@{
+    ViewData["Title"] = "Tạo đơn phỏng vấn";
+}
+
+<h2>Tạo đơn phỏng vấn cho ứng viên: @Model.Student.FullName</h2>
+
+<form asp-action="CreateInterview" method="post" class="mt-4">
+    <input type="hidden" name="applicationId" value="@Model.ApplicationId" />
+
+    <div class="form-group">
+        <label for="startTime">Thời gian bắt đầu</label>
+        <input type="datetime-local" class="form-control" id="startTime" name="startTime" required />
+    </div>
+
+    <div class="form-group">
+        <label for="endTime">Thời gian kết thúc</label>
+        <input type="datetime-local" class="form-control" id="endTime" name="endTime" required />
+    </div>
+
+    <div class="form-group">
+        <label for="interviewType">Loại phỏng vấn</label>
+        <select class="form-control" id="interviewType" name="interviewType" required>
+            <option value="online">Online</option>
+            <option value="in-person">Trực tiếp</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="location">Địa điểm</label>
+        <input type="text" class="form-control" id="location" name="location" />
+    </div>
+
+    <div class="form-group">
+        <label for="onlineLink">Link phỏng vấn (nếu online)</label>
+        <input type="text" class="form-control" id="onlineLink" name="onlineLink" />
+    </div>
+
+    <div class="form-group">
+        <label for="notes">Ghi chú</label>
+        <textarea class="form-control" id="notes" name="notes"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gửi đơn phỏng vấn</button>
+    <a href="@Url.Action("Index", "Jobs")" class="btn btn-secondary ms-2">Quay lại</a>
+</form>
