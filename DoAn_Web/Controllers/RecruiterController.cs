@@ -1,0 +1,1 @@
+thêm chức năng quản lý tin tuyển dụng cho nhà tuyển dụng
